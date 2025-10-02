@@ -1,2 +1,30 @@
-Introduction:
-\lipsum[1]
+The mapper algorithm is a popular tool in topological data analysis (TDA) and 
+visualization (TDV). Mapper takes as input a point cloud $X$, a clustering 
+scheme $\text{Clust}: S \to Part(S)$, a filter (also called lens) function 
+$f: X \to B$, and a cover of the filtered space $B$. The cover is used to 
+break down the data into overlapping regions of our filtered data which, 
+when pulled back by $f^{-1}$ allows for clustering within the overlapping 
+regions in the original space. Mapper takes these clusters and returns the 
+simplicial complex that is the nerve of the 'open cover' of these clusters.
+
+This description of the mapper algorithm is complex for those without a 
+mathematical background and is unmotivated without knowledge of the nerve 
+theorem. To address this the ShinyMappeR project provides an interactive
+shinyapp tool for teaching, learning, and exploring the effect paramter 
+choice has on the output. 
+
+ShinyMappeR is written in the R programming language and uses the recent 
+mappeR implementation of the mapper algorithm. There are many default 
+datasets (e.g., circles, figure-eights, spirals, and barbells) lens 
+functions (coordinate projections, eccentricity, PCA-1), and clustering 
+methods (DBSCAN, Agglomerative Clustering Methods: Single Linkage, Average Linkage,
+Complete Linkage, and Ward's Linkage).
+
+The structure of the application is simple, containing two sections: a user 
+interface which to select the dataset and parameter choices for mapper, 
+along with a visualization window which displays the original dataset, lens function,  
+preimages of each open cover of the filtered space, and an identifaction of nodes
+from the mapper complex to clusters within the pullback of each open cover.
+
+ShinyMappeR also contains a visualization for the recent TDA mapper method G-Mapper.
+[Desc. of G-Mapper] [Desc. of visualization].
