@@ -1,0 +1,86 @@
+\documentclass[11pt]{article}
+
+% --- Math packages ---
+\usepackage{amsmath, amsthm, amsfonts, mathtools, amscd}
+
+% --- Figures / graphics ---
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{tikz}
+
+% --- Utilities ---
+\usepackage{lipsum}     
+\usepackage{fancyhdr}   % custom headers/footers
+
+% --- Page style ---
+\pagestyle{fancy}
+\fancyhf{} % clear all header/footers
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{1pt}
+\fancyhead[C]{Draft Paper ShinyMappeR}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+
+% --- Abstract formatting (optional) ---
+\renewenvironment{abstract}{%
+  \hfill\begin{minipage}{0.95\textwidth}
+  \rule{\textwidth}{0.7pt} \\[6pt]}
+  { \\[6pt]\rule{\textwidth}{1pt}\end{minipage}}
+
+% --- Paragraph + margins ---
+\parindent=0pt
+\parskip=11pt
+\voffset=-0.8truein
+\hoffset=-0.8truein
+\setlength{\textwidth}{6.6in}
+\setlength{\textheight}{8.5in}
+
+% --- Theorem environments ---
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+
+% --- Title + authors
+\title{ShinyMappeR}
+\author{
+  TDA Research Group \\ Department of Mathematics, University of Iowa
+  \and
+  George C. K. \\ Department of Mathematics, University of Iowa
+  \and
+  Enrique ? \\ Department of Mathemaics, Iowa State
+}
+\date{\today}
+
+\begin{document}\Large
+
+\maketitle
+
+
+% --- Abstract
+\begin{abstract}
+\normalsize
+\textbf{Abstract.}  
+  \input{./sections/abstract.tex}
+\end{abstract}
+
+
+% --- Introduction
+\section{Introduction}
+\input{./sections/introduction.tex}
+
+
+% --- Background
+\section{Background}
+\lipsum[2-3]
+
+
+% --- Section 3
+\section{Main Results}
+\begin{theorem}
+TBD
+\end{theorem}
+
+\end{document}
