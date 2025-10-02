@@ -15,10 +15,45 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in
       {
-        devShells.default = pkgs.mkShell { 
-	packages = [ pkgs.bashInteractive ];
-	buildInputs = with pkgs; [ R rPackages.mappeR rPackages.shiny rPackages.dendextend rPackages.RColorBrewer rPackages.devtools rPackages.ggplot2 ];
-	};
-      }
-    );
+        devShells= {
+          default = pkgs.mkShell { 
+            buildInputs = with pkgs; [
+              bashInteractive
+              R 
+              rPackages.mappeR 
+              rPackages.shiny 
+              rPackages.dendextend 
+              rPackages.RColorBrewer 
+              rPackages.devtools 
+              rPackages.ggplot2 
+            ];
+          };
+
+        # optional shell with LaTeX
+          latex = pkgs.mkShell {
+            buildInputs = with pkgs; [
+                  bashInteractive
+                  R 
+                  rPackages.mappeR 
+                  rPackages.shiny 
+                  rPackages.dendextend 
+                  rPackages.RColorBrewer 
+                  rPackages.devtools 
+                  rPackages.ggplot2 
+
+                  (texlive.combine {
+                    inherit (texlive)
+                      scheme-medium
+                      lipsum
+                      latexmk
+                      biblatex
+                      biber
+                      xetex
+                      beamer;
+                  })
+                ];
+              };
+            };
+          }
+        );
 }
