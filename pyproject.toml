@@ -1,0 +1,11 @@
+[project]
+name = "pyshinymapper"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "rpy2>=3.6.7",
+    "shiny>=1.6.0",
+    "zen-mapper>=0.3.0",
+]
