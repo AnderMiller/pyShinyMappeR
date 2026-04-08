@@ -1,13 +1,32 @@
 [project]
-name = "pyshinymapper"
+name = "pyShinyMappeR"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
 requires-python = ">=3.12"
+
 dependencies = [
-    "rpy2>=3.6.7",
-    "scikit-learn>=1.8.0",
-    "shiny>=1.6.0",
-    "umap-learn>=0.5.11",
-    "zen-mapper>=0.3.0",
+    "shiny",
+    "numpy",
+    "pandas",
+    "scikit-learn",       # clustering algorithms
+    "networkx",           # graph manipulation
+    "zen-mapper",         # Python mapper backend
+    "rpy2",               # R <-> Python bridge
+    "plotly",             # interactive graph viz
+    "faicons",            # icon support for shiny
+    "umap-learn"
 ]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",     # for testing shiny reactive logic
+    "ruff",
+    "pyright",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "basic"

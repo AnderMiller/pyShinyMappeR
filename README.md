@@ -16,14 +16,27 @@ The core shiny logic is written in Python.
 We should also be able to change the backend computation to use either mappeR or Zen Mapper 
 after being given all information needed to compute the mapper graph.
 
-We separate out visualization and implementation processes as follows.
+We separate implementation files into the following directories.
 
 ## Datasets:
-We restrict to 2D.
+Supply a list of options for the dataset generation.
+
+Return:
+    2D numpy arrays or R/pandas dataframes.
 
 ## Cover Schemes
+Supply a list of options/variables for the cover scheme for the side panel.
+A flag for the lens function output dimension so that appropriate cover schemes can be used.
+
+Returns:
+    (list(list(ids)), metadata)
+        Where each interior list of the first tuple entry is a cover element. The second element 
+        of the tuple should contain visualization information needed for helpers.
+        E.g., metadata=("global_view", "draw_rectangles", other parameters])
 
 ## Lens Functions
+A flag for the dimension of the output so that the lens function or cover scheme is not shown
+when cover schemes are incompatible.
 
 ## Clustering Algorithms
 

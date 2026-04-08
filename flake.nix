@@ -5,18 +5,15 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs =
-    { self, nixpkgs, ... }:
+  outputs = { self, nixpkgs, ... }:
     let
-      # Define which platforms you support
-      systems = [
-        "x86_64-linux"
-        "aarch64-darwin"
-      ];
+      systems = [ "x86_64-linux" "aarch64-darwin" ];
+      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
+    in
+    {
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
 
-      # Helper to make per-system outputs
-      forAllSystems = nixpkgs.lib.genAttrs systems (
-        system:
+      devShells = forAllSystems (system:
         let
           pkgs = import nixpkgs { inherit system; };
 
@@ -38,32 +35,22 @@
               httpuv
               styler
               lintr
+              jsonlite
             ];
           };
-          # Not being used in favor of Overleaf most likely
-          # texlive = pkgs.texlive.combine {
-          #   inherit (pkgs.texlive)
-          #     scheme-basic
-          #     collection-latexextra
-          #     biber
-          #     latexmk
-          #     ;
-          # };
         in
         {
-          formatter = pkgs.nixfmt;
-
-          devShells.default = pkgs.mkShell {
+          default = pkgs.mkShell {
             LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
               pkgs.stdenv.cc.cc
               pkgs.libz
+              pkgs.R   # rpy2 needs libR.so on LD_LIBRARY_PATH
             ];
 
             LC_ALL = "en_US.UTF-8";
 
             buildInputs = with pkgs; [
               rEnv
-              #texlive
               pkg-config
               zlib.dev
               openssl.dev
@@ -71,32 +58,26 @@
               just
               watchexec
               jq
-              just
               pyright
               python3
               ruff
               uv
-              self.formatter.${system}
+              nixfmt
             ];
 
             shellHook = ''
               export R_LIBS_USER=""
+              export R_HOME="$(R RHOME)"
+              export DYLD_LIBRARY_PATH="$R_HOME/lib:$DYLD_LIBRARY_PATH"
               echo "Dev environment for ${system}..."
               echo "R: $(R --version | head -n 1)"
-              echo "LaTeX: is not installed!"
-              echo "UV: $(which uv)"
-              echo "Python: $(which python3)"
+              echo "UV: $(uv --version)"
+              echo "Python: $(python3 --version)"
               just --list-heading $'Commands:\n' \
                    --list-prefix "    just " \
                    --no-aliases --list
             '';
           };
-        }
-      );
-    in
-    {
-      formatter = nixpkgs.lib.genAttrs systems (system: forAllSystems.${system}.formatter);
-
-      devShells = nixpkgs.lib.genAttrs systems (system: forAllSystems.${system}.devShells);
+        });
     };
 }
