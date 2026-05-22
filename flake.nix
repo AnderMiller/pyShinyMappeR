@@ -5,15 +5,20 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, nixpkgs, ... }:
+  outputs =
+    { self, nixpkgs, ... }:
     let
-      systems = [ "x86_64-linux" "aarch64-darwin" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
     in
     {
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
 
-      devShells = forAllSystems (system:
+      devShells = forAllSystems (
+        system:
         let
           pkgs = import nixpkgs { inherit system; };
 
@@ -44,7 +49,7 @@
             LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
               pkgs.stdenv.cc.cc
               pkgs.libz
-              pkgs.R   # rpy2 needs libR.so on LD_LIBRARY_PATH
+              pkgs.R # rpy2 needs libR.so on LD_LIBRARY_PATH
             ];
 
             LC_ALL = "en_US.UTF-8";
@@ -78,6 +83,7 @@
                    --no-aliases --list
             '';
           };
-        });
+        }
+      );
     };
 }

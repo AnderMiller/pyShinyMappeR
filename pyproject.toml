@@ -13,7 +13,9 @@ dependencies = [
     "rpy2",               # R <-> Python bridge
     "plotly",             # interactive graph viz
     "faicons",            # icon support for shiny
-    "umap-learn"
+    "umap-learn",
+    "matplotlib>=3.10.8",
+    "kaiju-mapper>=0.1.1",
 ]
 
 [dependency-groups]

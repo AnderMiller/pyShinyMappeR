@@ -30,16 +30,19 @@ format:
     Rscript -e "styler::style_dir('.', exclude_dirs = c('.direnv', 'paper', 'rsconnect', 'tests'), recursive = TRUE)"
     Rscript -e "if (dir.exists('tests')) styler::style_dir('tests') else cat('No tests/ directory found\n')"
     nix fmt flake.nix
-    just --unstable --fmt
+    ruff format .
+    ruff check --fix .
+
 
 # Lint R code
 lint:
-    Rscript -e "lintr::lint_dir('.', exclusions = c('.direnv', 'paper', 'rsconnect', 'tests'))"
-    Rscript -e "if (dir.exists('tests')) lintr::lint_dir('tests') else cat('No tests/ directory found\n')"
+    ruff format --check .
+    ruff check
+
 
 # Start shinymapper app
 app:
-    R -e "shiny::runApp('app.R')" 2>&1
+  shiny run main.py
 
 # Test the code
 test:

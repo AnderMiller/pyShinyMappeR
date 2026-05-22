@@ -43,7 +43,7 @@ NIX_BINTOOLS='/nix/store/hwn7mviydmcdr2gw3zx30rcc0xi7k40c-cctools-binutils-darwi
 export NIX_BINTOOLS
 NIX_BINTOOLS_WRAPPER_TARGET_HOST_arm64_apple_darwin='1'
 export NIX_BINTOOLS_WRAPPER_TARGET_HOST_arm64_apple_darwin
-NIX_BUILD_CORES='10'
+NIX_BUILD_CORES='15'
 export NIX_BUILD_CORES
 NIX_CC='/nix/store/s7qlr26bmc6n4r607scz8iiwcg6yg4ic-clang-wrapper-21.1.8'
 export NIX_CC
@@ -185,7 +185,7 @@ name='nix-shell-env'
 export name
 nativeBuildInputs=''
 export nativeBuildInputs
-out='/Users/byleth/Projects/pyShinyMappeR/outputs/out'
+out='/Users/ander/Projects/pyShinyMappeR/outputs/out'
 export out
 outputBin='out'
 outputDev='out'
@@ -216,7 +216,7 @@ preConfigurePhases=' updateAutotoolsGnuConfigScriptsPhase'
 declare -a preFixupHooks=('_moveToShare' '_multioutDocs' '_multioutDevs' )
 preferLocalBuild='1'
 export preferLocalBuild
-prefix='/Users/byleth/Projects/pyShinyMappeR/outputs/out'
+prefix='/Users/ander/Projects/pyShinyMappeR/outputs/out'
 declare -a propagatedBuildDepFiles=('propagated-build-build-deps' 'propagated-native-build-inputs' 'propagated-build-target-deps' )
 propagatedBuildInputs=''
 export propagatedBuildInputs
