@@ -5,3 +5,6 @@
 .Ruserdata
 .direnv
 .envrc
+__pycache__
+.ruff_cache
+.venv

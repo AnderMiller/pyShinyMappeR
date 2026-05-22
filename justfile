@@ -16,19 +16,10 @@ write:
         --clear \
         -- just build
 
-# Clean build artifacts
-clean:
-    cd paper && latexmk -c
-    find . -name "*.Rhistory" -delete
-    find . -name "*.RData" -delete
-    find . -name "*.Rproj.user" -type d -exec rm -rf {} +
 
 alias fmt := format
-
 # Format all the code
 format:
-    Rscript -e "styler::style_dir('.', exclude_dirs = c('.direnv', 'paper', 'rsconnect', 'tests'), recursive = TRUE)"
-    Rscript -e "if (dir.exists('tests')) styler::style_dir('tests') else cat('No tests/ directory found\n')"
     nix fmt flake.nix
     ruff format .
     ruff check --fix .
@@ -46,4 +37,4 @@ app:
 
 # Test the code
 test:
-    echo "Tests not yet implemented."
+    echo "Will use pytest. Tests not yet implemented."
