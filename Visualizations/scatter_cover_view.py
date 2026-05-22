@@ -3,12 +3,16 @@ from matplotlib.figure import Figure
 from zen_mapper.types import MapperResult
 
 from Helpers.param import Param
-from Helpers.results import *
+from Helpers.results import (
+    CovererResult,
+    DatasetResult,
+    FilterResult,
+)
 
 """
-This module requires that the lens function be able to return 
+This module requires that the lens function be able to return
 the equation of a line on which the original dataset is projected to.
-This is straight forward for a theta projection but is more complicated for 
+This is straight forward for a theta projection but is more complicated for
 something like PCA which auto-centers the dataset.
 
 TODO: Add a supported cover, supported clusterers, etc tags
@@ -48,7 +52,7 @@ def render(
 ) -> Figure:
 
     data = data_result.data
-    filtered_data = filter_result.filtered_data
+    # filtered_data = filter_result.filtered_data
     filter_used = filter_result.label
     fig, ax = plt.subplots()
     ax.scatter(data[:, 0], data[:, 1], s=params["point_size"], alpha=params["alpha"])

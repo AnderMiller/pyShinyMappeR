@@ -11,7 +11,8 @@ Each arm is a parametric curve where a point at parameter $t \\in [0, 1]$
 is placed at angle $\\theta(t)$ and radius $r(t)$:
 
 $$
-\\theta(t) = 2\\pi \\cdot n_{\\text{turns}} \\cdot t + \\frac{2\\pi \\cdot k}{n_{\\text{arms}}}
+\\theta(t) = 2\\pi \\cdot n_{\\text{turns}} \\cdot t +
+\\frac{2\\pi \\cdot k}{n_{\\text{arms}}}
 $$
 
 $$
@@ -21,7 +22,8 @@ $$
 giving Cartesian coordinates
 
 $$
-(x, y) = r(t)\\cdot(\\cos\\theta(t), \\sin\\theta(t)) + \\lambda \\cdot \\text{Noise}(\\sigma)
+(x, y) = r(t)\\cdot(\\cos\\theta(t), \\sin\\theta(t))
++ \\lambda \\cdot \\text{Noise}(\\sigma)
 $$
 
 where $k$ is the arm index and $\\alpha$ is the **radius exponent**.
@@ -36,7 +38,8 @@ The **radius exponent** $\\alpha$ controls the spacing of points along each arm:
 
 ---
 
-**Noise** controls the distribution of the additive noise (e.g., the function $\\text{Noise}(\\sigma)$):
+**Noise** controls the distribution of the additive noise (e.g.,
+the function $\\text{Noise}(\\sigma)$):
 
 - *Gaussian:*  $\\mathcal{N}(0, \\sigma^2)$ applied independently in $x$ and $y$.
 """

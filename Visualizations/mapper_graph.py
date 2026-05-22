@@ -13,11 +13,12 @@ PARAMS = [
         id="node_size",
         type="slider",
         label="Node Size",
-        min=10,
-        max=500,
-        value=200,
+        min=1,
+        max=1000,
+        value=500,
         step=10,
     ),
+    Param(id="show_labels", type="checkbox", label="Show Labels", value=False),
     Param(
         id="alpha",
         type="slider",
@@ -41,7 +42,7 @@ def render(data, filtered, cover, result: MapperResult, params) -> Figure:
         ax=ax,
         node_size=params["node_size"],
         alpha=params["alpha"],
-        with_labels=False,
+        with_labels=params["show_labels"],
     )
     ax.set_title("Mapper Graph")
     ax.set_xlabel(f"{len(result.nodes)} nodes, {G.number_of_edges()} edges")

@@ -8,7 +8,8 @@ OUTPUT_DIM = 1
 DESCRIPTION = """
 ### $ \\theta$-Projection
 
-This filter function projects 2D-data to $x$-axis rotated $\\theta$ degrees counter-clockwise.
+This filter function projects 2D-data to $x$-axis rotated $\\theta$ degrees
+counter-clockwise.
 """
 
 PARAMS = [

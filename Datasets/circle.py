@@ -5,21 +5,24 @@ from Helpers.param import Param
 LABEL = "Circle"
 
 DESCRIPTION = """
-The circle is the simplest dataset with non-trivial topology. It should be used as the first 
-sanity-check example when implementing any sort of TDA methodology. 
+The circle is the simplest dataset with non-trivial topology. It should be used as the
+first sanity-check example when implementing any sort of TDA methodology.
 
-This dataset samples angles from the domain $[0, \\theta_{\\max}] \\subseteq [0, 2 \\pi ]$ and 
-passes them to the unit circle by the standard parameterization. Various noise distributions with weight $\\lambda$ can be added to each point 
+This dataset samples angles from the domain
+$[0, \\theta_{\\max}] \\subseteq [0, 2 \\pi ]$ and
+passes them to the unit circle by the standard parameterization.
+Various noise distributions with weight $\\lambda$ can be added to each point
 in $\\mathbb{R}^{2}$. So our dataset is made up of points in the form:
 
 $$
-(x, y) = (\\cos\\theta, \\sin\\theta) + \\lambda \cdot \\text{Noise}(\\sigma)
+(x, y) = (\\cos\\theta, \\sin\\theta) + \\lambda \\cdot \\text{Noise}(\\sigma)
 $$
 
 ---
 
 
-The **Theta sampling** parameter controls how $\\theta$ is drawn from $[0, \\theta_{\\max}]$:
+The **Theta sampling** parameter controls how
+$\\theta$ is drawn from $[0, \\theta_{\\max}]$:
 
 - *Uniform:*  $\\theta \\sim \\text{Uniform}(0, \\theta_{\\max})$.
 
@@ -29,7 +32,8 @@ The **Theta sampling** parameter controls how $\\theta$ is drawn from $[0, \\the
 
 ---
 
-**Noise type** controls the distribution of the additive noise (e.g., the function $ \\text{Noise}(\\sigma)$):
+**Noise type** controls the distribution of the additive noise (e.g.,
+the function $ \\text{Noise}(\\sigma)$):
 
 - *Gaussian:*  $ \\mathcal{N}(0, \\sigma^2)$
 - *Uniform:*  $\\text{Uniform}(-\\sigma, \\sigma)$

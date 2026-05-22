@@ -1,4 +1,3 @@
-
 import zen_mapper as zm
 from shiny import Inputs, Outputs, Session, reactive, render, ui
 from zen_mapper.types import MapperResult
