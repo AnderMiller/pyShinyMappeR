@@ -63,7 +63,7 @@ class NumericParam(Param):
 
 @dataclass(frozen=True)
 class SelectParam(Param):
-    choices: tuple[str] | dict[str, list[str]] | dict[str, dict[str, str]]
+    choices: tuple[str, ...] | dict[str, list[str]] | dict[str, dict[str, str]]
     """Either a list of choices or a dictionary mapping choice values to labels.
     Note that if a dictionary is provided, the keys are used as the (input)
     values and the values are labels displayed to the user.
