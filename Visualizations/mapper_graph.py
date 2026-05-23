@@ -46,7 +46,4 @@ def render(data, filtered, cover, result: MapperResult, params) -> Figure:
     )
     ax.set_title("Mapper Graph")
     ax.set_xlabel(f"{len(result.nodes)} nodes, {G.number_of_edges()} edges")
-    print(cover.__dict__)
-    print("###########")
-    print(filtered)
     return fig

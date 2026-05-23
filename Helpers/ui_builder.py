@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any
 
 from shiny import ui
 
@@ -10,6 +11,8 @@ def param_to_ui(module_id: str, param: Param) -> ui.Tag:
 
     match param.type:
         case "slider":
+            if (param.min is None) or (param.max is None):
+                raise ValueError(f"The paramter {param.id} has a None entry.")
             return ui.input_slider(
                 control_id,
                 param.label,
@@ -40,8 +43,6 @@ def param_to_ui(module_id: str, param: Param) -> ui.Tag:
                 param.label,
                 value=param.value,
             )
-        case _:
-            raise ValueError(f"Unknown param type '{param.type}' in param '{param.id}'")
 
 
 def _description_accordion(module_id: str, description: str) -> ui.Tag:
@@ -72,7 +73,7 @@ def _description_accordion(module_id: str, description: str) -> ui.Tag:
     )
 
 
-def dataset_panel(dataset_modules: dict) -> ui.Tag:
+def dataset_panel(dataset_modules: dict) -> Any:
     if not dataset_modules:
         return ui.nav_panel("Dataset", ui.markdown("_No dataset modules found._"))
 
@@ -98,7 +99,7 @@ def dataset_panel(dataset_modules: dict) -> ui.Tag:
     )
 
 
-def filter_panel(filter_modules: dict) -> ui.Tag:
+def filter_panel(filter_modules: dict) -> Any:
     if not filter_modules:
         return ui.nav_panel("Filter", ui.markdown("_No filter modules found._"))
 
@@ -124,7 +125,7 @@ def filter_panel(filter_modules: dict) -> ui.Tag:
     )
 
 
-def cover_panel(cover_modules: dict) -> ui.Tag:
+def cover_panel(cover_modules: dict) -> Any:
     if not cover_modules:
         return ui.nav_panel("Cover", ui.markdown("_No cover modules found._"))
 
@@ -150,7 +151,7 @@ def cover_panel(cover_modules: dict) -> ui.Tag:
     )
 
 
-def cluster_panel(cluster_modules: dict) -> ui.Tag:
+def cluster_panel(cluster_modules: dict) -> Any:
     if not cluster_modules:
         return ui.nav_panel("Cluster", ui.markdown("_No cluster modules found._"))
 
@@ -178,7 +179,7 @@ def cluster_panel(cluster_modules: dict) -> ui.Tag:
     )
 
 
-def visualization_panel(visualization_modules: dict) -> ui.Tag:
+def visualization_panel(visualization_modules: dict) -> Any:
     if not visualization_modules:
         return ui.nav_panel(
             "Visualization", ui.markdown("_No visualization modules found._")
@@ -215,7 +216,7 @@ def visualization_panel(visualization_modules: dict) -> ui.Tag:
     )
 
 
-def _help_panel() -> ui.Tag:
+def _help_panel() -> Any:
     readme_path = Path(__file__).parent.parent / "README.md"
     try:
         readme_content = readme_path.read_text(encoding="utf-8")
@@ -241,7 +242,7 @@ def build_sidebar(
     cover_modules: dict,
     cluster_modules: dict,
     visualization_modules: dict,
-) -> ui.Tag:
+) -> ui.Sidebar:
     return ui.sidebar(
         ui.markdown("# pyShinyMapper"),
         ui.navset_underline(

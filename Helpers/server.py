@@ -119,15 +119,4 @@ def make_server(
         for vid, vmod in visualization_modules.items():
             make_renderer(vid, vmod)
 
-        # @render.plot
-        # def main_plot():
-        #     data = current_dataset()
-        #     result = current_mapper_result()
-        #     fig, ax = plt.subplots()
-        #     if data.shape[1] >= 2:
-        #         ax.scatter(data[:, 0], data[:, 1], s=10, alpha=0.6)
-        #         nx.draw(zm.to_networkx(result.nerve))
-        #     ax.set_title(dataset_modules[input.dataset_select()].LABEL)
-        #     return fig
-
     return server

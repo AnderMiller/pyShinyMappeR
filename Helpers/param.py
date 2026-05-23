@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Any, Literal
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True)  # state changes should be done using shiny
 class Param:
     id: str
     type: Literal["slider", "numeric", "select", "checkbox"]
