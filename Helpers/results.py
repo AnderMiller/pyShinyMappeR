@@ -32,7 +32,7 @@ class DatasetResult(BasicResult):
 @dataclass
 class FilterResult(BasicResult):
     filtered_data: np.ndarray
-    line: Optional["tuple[str]"] = None
+    line: Optional["tuple[str, ...]"] = None
 
 
 @dataclass
@@ -45,6 +45,7 @@ class ClustererResult(BasicResult):
     clusterer: Clusterer
 
 
+# Do not put hard to compute things inside of context.
 @dataclass
 class Context:
     dataset: Optional["DatasetResult"] = None
