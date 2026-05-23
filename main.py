@@ -77,6 +77,7 @@ app_ui = ui.page_fillable(
             VISUALIZATION_MODULES,
         ),
         # ui.output_plot("main_plot"),
+        # reserve a spot for plots
         ui.div(
             *[
                 ui.panel_conditional(
