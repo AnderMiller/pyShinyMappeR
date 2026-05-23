@@ -1,6 +1,9 @@
+from typing import Any
+
 import numpy as np
 
-from Helpers.param import Param
+from Helpers.param import NumericParam, SelectParam, SliderParam
+from Helpers.results import DatasetResult
 
 LABEL = "Circle"
 
@@ -41,59 +44,52 @@ the function $ \\text{Noise}(\\sigma)$):
 """
 
 PARAMS = [
-    Param(
+    SliderParam(
         id="n_points",
-        type="slider",
         label="Number of Points $ ( N ) $ ",
         min=10,
         max=1000,
         value=200,
         step=10,
     ),
-    Param(
+    SliderParam(
         id="theta_range",
-        type="slider",
         label="Theta Range $( \\theta_{\\text{max}} ) $ ",
         min=0.0,
         max=round(2 * np.pi, 4),
         value=round(2 * np.pi, 4),
         step=0.01,
     ),
-    Param(
+    SelectParam(
         id="theta_sampling",
-        type="select",
         label="$ \\theta \\text{-Sampling} $",
         choices=("uniform", "normal", "fibonacci"),
-        value="uniform",
+        selected="uniform",
     ),
-    Param(
+    SliderParam(
         id="noise_weight",
-        type="slider",
         label="Noise Weight $ ( \\lambda ) $ ",
         min=0.0,
         max=1.0,
         value=0.05,
         step=0.01,
     ),
-    Param(
+    SelectParam(
         id="noise_type",
-        type="select",
         label="Noise Type",
         choices=("gaussian", "uniform", "radial"),
-        value="gaussian",
+        selected="gaussian",
     ),
-    Param(
+    SliderParam(
         id="noise_scale",
-        type="slider",
         label=" $ \\text{Noise Scale }( \\sigma ) $ ",
         min=0.0,
         max=1.0,
         value=0.05,
         step=0.01,
     ),
-    Param(
+    NumericParam(
         id="seed",
-        type="numeric",
         label="Random Seed",
         value=42,
         min=0,
@@ -159,4 +155,14 @@ def generate(params: dict) -> np.ndarray:
 
     return (
         np.column_stack([np.cos(theta), np.sin(theta)]) + params["noise_weight"] * noise
+    )
+
+
+def result(params: dict, modules: Any = None, module_id: Any = None):
+    return DatasetResult(
+        params=params,
+        module_id=module_id,
+        modules=modules,
+        label=LABEL,
+        data=generate(params),
     )

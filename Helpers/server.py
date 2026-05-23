@@ -14,17 +14,14 @@ def make_server(
 ):
 
     def server(input: Inputs, output: Outputs, session: Session):
+
         @reactive.calc
         def current_dataset() -> DatasetResult:
             module_id = input.dataset_select()
             mod = dataset_modules[module_id]
             params = {p.id: input[f"{module_id}__{p.id}"]() for p in mod.PARAMS}
-            return DatasetResult(
-                data=mod.generate(params),
-                params=params,
-                module_id=module_id,
-                modules=dataset_modules,
-                label=mod.LABEL,
+            return mod.result(
+                params=params, modules=dataset_modules, module_id=module_id
             )
 
         @reactive.calc

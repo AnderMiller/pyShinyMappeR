@@ -1,6 +1,9 @@
+from typing import Any
+
 import numpy as np
 
-from Helpers.param import Param
+from Helpers.param import NumericParam, SliderParam
+from Helpers.results import DatasetResult
 
 LABEL = "Spiral"
 
@@ -45,81 +48,72 @@ the function $\\text{Noise}(\\sigma)$):
 """
 
 PARAMS = [
-    Param(
+    SliderParam(
         id="n_points",
-        type="slider",
         label="Number of Points $ ( N ) $",
         min=10,
         max=2000,
         value=300,
         step=10,
     ),
-    Param(
+    SliderParam(
         id="n_turns",
-        type="slider",
         label="Number of Turns $ ( n_{\\text{turns}} ) $",
         min=1,
         max=10,
         value=3,
         step=1,
     ),
-    Param(
+    SliderParam(
         id="n_arms",
-        type="slider",
         label="Number of Arms $ ( n_{\\text{arms}} ) $",
         min=1,
         max=6,
         value=1,
         step=1,
     ),
-    Param(
+    SliderParam(
         id="start_radius",
-        type="slider",
         label="Start Radius $ ( r_{\\text{start}} ) $",
         min=0.0,
         max=2.0,
         value=0.0,
         step=0.1,
     ),
-    Param(
+    SliderParam(
         id="end_radius",
-        type="slider",
         label="End Radius $ ( r_{\\text{end}} ) $",
         min=0.5,
         max=5.0,
         value=2.0,
         step=0.1,
     ),
-    Param(
+    SliderParam(
         id="exponent",
-        type="slider",
         label="Radius Exponent $ ( \\alpha ) $",
         min=0.5,
         max=3.0,
         value=1.0,
         step=0.1,
     ),
-    Param(
+    SliderParam(
         id="noise_weight",
-        type="slider",
         label="Noise Weight $ ( \\lambda ) $",
         min=0.0,
         max=1.0,
         value=0.05,
         step=0.01,
     ),
-    Param(
+    SliderParam(
         id="noise_scale",
-        type="slider",
         label="$ \\text{Noise Scale } ( \\sigma ) $",
         min=0.0,
         max=0.5,
         value=0.05,
         step=0.01,
     ),
-    Param(
+    NumericParam(
         id="seed",
-        type="numeric",
         label="Random Seed",
         value=42,
         min=0,
@@ -156,3 +150,13 @@ def generate(params: dict) -> np.ndarray:
         arms.append(np.column_stack([x, y]) + params["noise_weight"] * noise)
 
     return np.vstack(arms)
+
+
+def result(params: dict, modules: Any = None, module_id: Any = None):
+    return DatasetResult(
+        params=params,
+        module_id=module_id,
+        modules=modules,
+        label=LABEL,
+        data=generate(params),
+    )
