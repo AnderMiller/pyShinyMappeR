@@ -97,7 +97,7 @@ def render(
             alpha=params["h_alpha"],
             color=cluster_color,
             label=f"Node {node_id}",
-            edgecolors="white",
+            edgecolors=None,
             linewidths=0.5,
             zorder=2,
         )
