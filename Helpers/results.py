@@ -1,7 +1,10 @@
 from dataclasses import dataclass
+from typing import Optional
 
 import numpy as np
 from zen_mapper.types import Clusterer, CoverScheme
+
+from Helpers.ui_controller import UIController
 
 """
 Server functions should return information necessary to construct
@@ -22,11 +25,14 @@ class BasicResult:
 class DatasetResult(BasicResult):
     data: np.ndarray
 
+    def shape(self):
+        return np.shape(self.data)
+
 
 @dataclass
 class FilterResult(BasicResult):
     filtered_data: np.ndarray
-    line: tuple[str] | None
+    line: Optional["tuple[str]"] = None
 
 
 @dataclass
@@ -37,3 +43,17 @@ class CovererResult(BasicResult):
 @dataclass
 class ClustererResult(BasicResult):
     clusterer: Clusterer
+
+
+@dataclass
+class Context:
+    dataset: Optional["DatasetResult"] = None
+    filter: Optional["FilterResult"] = None
+    coverer: Optional["CovererResult"] = None
+    clusterer: Optional["ClustererResult"] = None
+    ui: Optional["UIController"] = None
+
+    def __post_init__(self):
+        # TODO: add checks or flags
+        # for example:
+        pass
