@@ -26,20 +26,15 @@ def make_server(
 
         @reactive.calc
         def current_filtered_dataset() -> FilterResult:
-            data = current_dataset().data
+            dataset = current_dataset()
             module_id = input.filter_select()
             mod = filter_modules[module_id]
             params = {p.id: input[f"{module_id}__{p.id}"]() for p in mod.PARAMS}
-            return FilterResult(
-                filtered_data=mod.filter(data=data, params=params),
+            return mod.result(
+                dataset=dataset,
                 params=params,
-                module_id=module_id,
                 modules=filter_modules,
-                label=mod.LABEL,
-                # define function for trying module arguments.
-                # this sort of takes care of "supported blank"
-                # Should also update result classes.
-                line=None,
+                module_id=module_id,
             )
 
         @reactive.calc

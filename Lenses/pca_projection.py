@@ -1,8 +1,11 @@
+from typing import Any
+
 import numpy as np
 from sklearn.decomposition import PCA
 
 # Note that PCA centers but does not rescale the data
-from Helpers.param import Param
+from Helpers.param import SliderParam
+from Helpers.results import DatasetResult, FilterResult
 
 LABEL = "PCA"
 
@@ -16,9 +19,8 @@ This function first centers the input data and applies PCA.
 """
 
 PARAMS = [
-    Param(
+    SliderParam(
         id="output_dimension",
-        type="slider",
         label="Dimenison",
         min=1,
         max=1,
@@ -38,3 +40,19 @@ def projection_line():
     This should return something that specifies a line
     """
     return None
+
+
+def result(
+    dataset: DatasetResult,
+    params: dict,
+    modules: Any,
+    module_id: Any,
+):
+    return FilterResult(
+        params=params,
+        module_id=module_id,
+        modules=modules,
+        label=LABEL,
+        filtered_data=filter(data=dataset.data, params=params),
+        line=projection_line(),
+    )
