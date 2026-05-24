@@ -100,4 +100,5 @@ app = App(
         CLUSTER_MODULES,
         VISUALIZATION_MODULES,
     ),
+    debug=False,
 )
