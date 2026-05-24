@@ -2,50 +2,45 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from zen_mapper.types import MapperResult
 
-from Helpers.param import Param
+from Helpers.param import SliderParam
 from Helpers.results import CovererResult, DatasetResult, FilterResult
 
 LABEL = "Cover Element Explorer"
 PARAMS = [
-    Param(
+    SliderParam(
         id="h_size",
-        type="slider",
         label="Highlight Size",
         min=1,
         max=100,
         value=20,
         step=1,
     ),
-    Param(
+    SliderParam(
         id="h_alpha",
-        type="slider",
         label="Highlight Opacity",
         min=0.1,
         max=1.0,
         value=0.8,
         step=0.05,
     ),
-    Param(
+    SliderParam(
         id="bg_size",
-        type="slider",
         label="Background Size",
         min=1,
         max=50,
         value=5,
         step=1,
     ),
-    Param(
+    SliderParam(
         id="bg_alpha",
-        type="slider",
         label="Background Opacity",
         min=0.05,
         max=1.0,
         value=0.3,
         step=0.05,
     ),
-    Param(
+    SliderParam(
         id="selected_cover_element",
-        type="slider",
         label="Cover Element",
         min=1,
         max=10,

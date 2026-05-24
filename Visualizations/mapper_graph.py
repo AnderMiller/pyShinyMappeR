@@ -5,23 +5,21 @@ import zen_mapper as zm
 from matplotlib.figure import Figure
 from zen_mapper.types import MapperResult
 
-from Helpers.param import Param
+from Helpers.param import CheckboxParam, SliderParam
 
 LABEL = "Mapper Graph"
 PARAMS = [
-    Param(
+    SliderParam(
         id="node_size",
-        type="slider",
         label="Node Size",
         min=1,
         max=1000,
         value=500,
         step=10,
     ),
-    Param(id="show_labels", type="checkbox", label="Show Labels", value=False),
-    Param(
+    CheckboxParam(id="show_labels", label="Show Labels", value=False),
+    SliderParam(
         id="alpha",
-        type="slider",
         label="Opacity",
         min=0.1,
         max=1.0,

@@ -1,23 +1,21 @@
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 
-from Helpers.param import Param
+from Helpers.param import SliderParam
 from Helpers.results import CovererResult, DatasetResult, FilterResult
 
 LABEL = "Scatter"
 PARAMS = [
-    Param(
+    SliderParam(
         id="point_size",
-        type="slider",
         label="Point Size",
         min=1,
         max=50,
         value=10,
         step=1,
     ),
-    Param(
+    SliderParam(
         id="alpha",
-        type="slider",
         label="Opacity",
         min=0.1,
         max=1.0,
