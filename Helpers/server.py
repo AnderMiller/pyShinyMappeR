@@ -83,8 +83,6 @@ def make_server(
 
         @reactive.calc
         def current_context() -> Context:
-            print(input["cover_element_view__selected_cover_element"]())
-
             return Context(
                 dataset=current_dataset(),
                 filter=current_filtered_dataset(),
