@@ -10,7 +10,7 @@ dependencies = [
     "scikit-learn",       # clustering algorithms
     "networkx",           # graph manipulation
     "zen-mapper",         # Python mapper backend
-    "rpy2",               # R <-> Python bridge
+    # R <-> Python bridge
     "plotly",             # interactive graph viz
     "faicons",            # icon support for shiny
     "umap-learn",
