@@ -2,6 +2,8 @@
 from dataclasses import dataclass
 from typing import Any, Literal, Optional
 
+from shiny.ui import AnimationOptions
+
 
 @dataclass(frozen=True)  # state changes should be done using shiny
 class Param:
@@ -31,10 +33,10 @@ class SliderParam(Param):
     sep: str = ","
     pre: Optional[str] = None
     post: Optional[str] = None
-    animate: Optional[bool] = False
+    animate: bool | AnimationOptions = False
     time_format: Optional[str] = None
     timezone: Optional[str] = None
-    drag_range: Optional[bool] = True
+    drag_range: bool = True
 
 
 @dataclass(frozen=True)

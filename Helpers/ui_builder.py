@@ -1,47 +1,92 @@
 from pathlib import Path
+from turtle import update
 from typing import Any
 
 from shiny import ui
 
-from Helpers.param import Param
+from Helpers.param import (
+    CheckboxParam,
+    InputTextParam,
+    NumericParam,
+    Param,
+    SelectParam,
+    SliderParam,
+    SwitchParam,
+)
 
 
 def param_to_ui(module_id: str, param: Param) -> ui.Tag:
     control_id = f"{module_id}__{param.id}"
 
-    match param.type:
-        case "slider":
-            if (param.min is None) or (param.max is None):
-                raise ValueError(f"The paramter {param.id} has a None entry.")
+    match param:
+        case SliderParam():
             return ui.input_slider(
-                control_id,
-                param.label,
+                id=control_id,
+                label=param.label,
+                value=param.value,
                 min=param.min,
                 max=param.max,
-                value=param.value,
                 step=param.step if param.step is not None else 1,
+                ticks=param.ticks,
+                width=param.width,
+                sep=param.sep,
+                pre=param.pre,
+                post=param.post,
+                animate=param.animate,
+                time_format=param.time_format,
+                timezone=param.timezone,
+                drag_range=param.drag_range,
             )
-        case "numeric":
+        case NumericParam():
             return ui.input_numeric(
-                control_id,
-                param.label,
+                id=control_id,
+                label=param.label,
                 value=param.value,
+                update_on=param.update_on,
                 min=param.min,
                 max=param.max,
                 step=param.step if param.step is not None else 1,
+                width=param.width,
             )
-        case "select":
+        case SelectParam():
             return ui.input_select(
-                control_id,
-                param.label,
+                id=control_id,
+                label=param.label,
                 choices=list(param.choices),
-                selected=param.value,
+                selected=param.selected,
+                multiple=param.multiple,
+                width=param.width,
+                size=param.size,
             )
-        case "checkbox":
+        case CheckboxParam():
             return ui.input_checkbox(
-                control_id,
-                param.label,
+                id=control_id,
+                label=param.label,
                 value=param.value,
+                width=param.width,
+            )
+        case SwitchParam():
+            return ui.input_switch(
+                id=control_id,
+                label=param.label,
+                value=param.value,
+                width=param.width,
+            )
+        case InputTextParam():
+            return ui.input_text(
+                id=control_id,
+                label=param.label,
+                value=param.value,
+                width=param.width,
+                placeholder=param.placeholder,
+                autocomplete=param.autocomplete,
+                spellcheck=param.spellcheck,
+                update_on=param.update_on,
+            )
+        case _:
+            raise ValueError(
+                f"One of the parameters {(param.id, param.label)} \
+                cannot be unpacked by the UI Builder"
             )
 
 
