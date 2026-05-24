@@ -1,5 +1,4 @@
 from pathlib import Path
-from turtle import update
 from typing import Any
 
 from shiny import ui
