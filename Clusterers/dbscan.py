@@ -1,31 +1,32 @@
+from typing import Any
+
 import zen_mapper as zm
 from sklearn.cluster import DBSCAN
 from zen_mapper.types import Clusterer
 
-from Helpers.param import Param
+from Helpers.param import SelectParam, SliderParam
+from Helpers.results import ClustererResult, CovererResult, DatasetResult, FilterResult
 
 LABEL = "DBSCAN"
 PARAMS = [
-    Param(
+    SliderParam(
         id="eps",
-        type="slider",
         label="$\\epsilon$",
         min=0.01,
         max=2.0,
         value=0.2,
         step=0.01,
     ),
-    Param(
+    SliderParam(
         id="min_samples",
-        type="slider",
         label="Min Samples",
         min=1,
         max=25,
         value=5,
+        step=1,
     ),
-    Param(
+    SelectParam(
         id="metric",
-        type="select",
         label="Metric",
         choices=(
             "chebyshev",
@@ -52,12 +53,11 @@ PARAMS = [
             # "seuclidean",
             # "matching",
         ),
-        value="euclidean",
+        selected="euclidean",
     ),
-    Param(
+    SelectParam(
         id="algorithm",
-        type="select",
-        label="Algorithm",
+        label="Algorithm (Locked to Auto)",
         choices=(
             "auto",
             # "ball_tree",
@@ -68,15 +68,15 @@ PARAMS = [
             ### not super important.
             ### If a user wants to include it they can uncomment this
         ),
-        value="auto",
+        selected="auto",
     ),
-    Param(
+    SliderParam(
         id="leaf_size",
-        type="slider",
-        label="Leaf Size",
+        label="Leaf Size (algorithm option)",
         value=30,
         min=1,
         max=100,
+        step=1,
     ),
 ]
 
@@ -90,4 +90,21 @@ def cluster(params: dict) -> Clusterer:
             algorithm=params["algorithm"],
             leaf_size=params["leaf_size"],
         )
+    )
+
+
+def result(
+    data: DatasetResult,
+    filtered: FilterResult,
+    cover: CovererResult,
+    params: dict,
+    modules: Any,
+    module_id: Any,
+):
+    return ClustererResult(
+        params=params,
+        modules=modules,
+        module_id=module_id,
+        label=LABEL,
+        clusterer=cluster(params=params),
     )

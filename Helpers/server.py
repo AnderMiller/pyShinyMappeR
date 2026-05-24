@@ -71,12 +71,13 @@ def make_server(
             module_id = input.cluster_select()
             mod = cluster_modules[module_id]
             params = {p.id: input[f"{module_id}__{p.id}"]() for p in mod.PARAMS}
-            return ClustererResult(
-                clusterer=mod.cluster(params),
+            return mod.result(
+                data=current_dataset(),
+                filtered=current_filtered_dataset(),
+                cover=current_cover(),
                 params=params,
+                modules=cover_modules,
                 module_id=module_id,
-                modules=cluster_modules,
-                label=mod.LABEL,
             )
 
         @reactive.calc
