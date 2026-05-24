@@ -42,12 +42,12 @@ def make_server(
             module_id = input.cover_select()
             mod = cover_modules[module_id]
             params = {p.id: input[f"{module_id}__{p.id}"]() for p in mod.PARAMS}
-            return CovererResult(
-                cover=mod.cover(params),
+            return mod.result(
+                data=current_dataset(),
+                filtered=current_filtered_dataset(),
                 params=params,
-                module_id=module_id,
-                label=mod.LABEL,
                 modules=cover_modules,
+                module_id=module_id,
             )
 
         @reactive.effect
