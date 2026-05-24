@@ -4,9 +4,7 @@ from zen_mapper.types import MapperResult
 
 from Helpers.param import SliderParam
 from Helpers.results import (
-    CovererResult,
-    DatasetResult,
-    FilterResult,
+    Context,
 )
 
 """
@@ -41,17 +39,13 @@ PARAMS = [
 SUPPORTED_FILTER_MOD_IDS = ["theta_projection", "pca_projection"]
 
 
-def render(
-    data_result: DatasetResult,
-    filter_result: FilterResult,
-    cover_result: CovererResult,
-    mapper_result: MapperResult,
-    params: dict,
-) -> Figure:
+def render(ctx: Context, mapper_result: MapperResult, params: dict) -> Figure:
+    assert ctx.dataset is not None
+    assert ctx.filter is not None
 
-    data = data_result.data
+    data = ctx.dataset.data
     # filtered_data = filter_result.filtered_data
-    filter_used = filter_result.label
+    filter_used = ctx.filter.label
     fig, ax = plt.subplots()
     ax.scatter(data[:, 0], data[:, 1], s=params["point_size"], alpha=params["alpha"])
     ax.set_aspect("equal")

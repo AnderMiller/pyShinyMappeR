@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+from shiny import reactive
 from zen_mapper.types import MapperResult
 
 from Helpers.param import SliderParam
-from Helpers.results import CovererResult, DatasetResult, FilterResult
+from Helpers.results import Context
 
 LABEL = "Cover Element Explorer"
 PARAMS = [
@@ -50,25 +51,23 @@ PARAMS = [
 ]
 
 
-def render(
-    data_result: DatasetResult,
-    filtered: FilterResult,
-    cover: CovererResult,
-    nodes: MapperResult,
-    params: dict,
-) -> Figure:
-    num_cover_elements = len(nodes.cover)
+def render(ctx: Context, mapper_result: MapperResult, params: dict) -> Figure:
+    num_cover_elements = len(mapper_result.cover)
+
     cover_idx = min(int(params["selected_cover_element"]) - 1, num_cover_elements - 1)
 
+    assert ctx.dataset is not None
+    data = ctx.dataset.data
+
     # cluster_indices contains the IDs of the nodes in this cover element
-    cluster_indices = nodes.cover[cover_idx]
+    cluster_indices = mapper_result.cover[cover_idx]
 
     fig, ax = plt.subplots(figsize=(8, 6))
 
     # 1. Background points
     ax.scatter(
-        data_result.data[:, 0],
-        data_result.data[:, 1],
+        data[:, 0],
+        data[:, 1],
         s=params["bg_size"],
         alpha=params["bg_alpha"],
         color="lightgray",
@@ -82,12 +81,12 @@ def render(
     cmap = plt.get_cmap("viridis")
 
     for i, node_id in enumerate(cluster_indices):
-        indices = nodes.nodes[node_id]
+        indices = mapper_result.nodes[node_id]
         cluster_color = cmap((i + 1) / num_cover_elements)  # Cycle through 10 colors
 
         ax.scatter(
-            data_result.data[indices, 0],
-            data_result.data[indices, 1],
+            data[indices, 0],
+            data[indices, 1],
             s=params["h_size"],
             alpha=params["h_alpha"],
             color=cluster_color,
@@ -98,10 +97,34 @@ def render(
         )
 
     ax.set_aspect("equal")
-    ax.set_title(f"Cover Element {cover_idx + 1} ({len(cluster_indices)} clusters)")
+    ax.set_title(
+        f"Cover Element {cover_idx + 1} ({len(cluster_indices)} \
+        clusters)"
+    )
 
     # If there are too many clusters, the legend might get messy
     if len(cluster_indices) < 10:
         ax.legend()
 
     return fig
+
+
+def update_ui(ctx: Context, mapper_result: MapperResult, mod_id: str):
+    n_elements = len(mapper_result.cover)
+    # ID as in param_to_ui
+    slider_id = f"{mod_id}__selected_cover_element"
+
+    if ctx.ui is not None:
+        current_val = ctx.ui.input[slider_id]()
+
+        ctx.ui.update_slider(
+            slider_id=slider_id,
+            param=SliderParam(
+                id="selected_cover_element",
+                label="Cover Element",
+                value=min(n_elements, current_val),
+                min=1,
+                max=n_elements,
+                step=1,
+            ),
+        )

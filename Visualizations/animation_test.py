@@ -1,4 +1,7 @@
+from zen_mapper.types import MapperResult
+
 from Helpers.param import SliderParam
+from Helpers.results import Context
 
 LABEL = "Animation test"
 PARAMS = [
@@ -21,7 +24,7 @@ PARAMS = [
 ]
 
 
-def render():
+def render(ctx: Context, mapper_result: MapperResult, params: dict):
     import matplotlib.animation as animation
     import matplotlib.pyplot as plt
     import numpy as np

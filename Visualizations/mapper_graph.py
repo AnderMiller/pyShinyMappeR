@@ -6,6 +6,7 @@ from matplotlib.figure import Figure
 from zen_mapper.types import MapperResult
 
 from Helpers.param import CheckboxParam, SliderParam
+from Helpers.results import Context
 
 LABEL = "Mapper Graph"
 PARAMS = [
@@ -29,8 +30,8 @@ PARAMS = [
 ]
 
 
-def render(data, filtered, cover, result: MapperResult, params) -> Figure:
-    G = zm.to_networkx(result.nerve)
+def render(ctx: Context, mapper_result: MapperResult, params: dict) -> Figure:
+    G = zm.to_networkx(mapper_result.nerve)
 
     fig, ax = plt.subplots()
     pos = nx.spring_layout(G, seed=42)
@@ -43,5 +44,5 @@ def render(data, filtered, cover, result: MapperResult, params) -> Figure:
         with_labels=params["show_labels"],
     )
     ax.set_title("Mapper Graph")
-    ax.set_xlabel(f"{len(result.nodes)} nodes, {G.number_of_edges()} edges")
+    ax.set_xlabel(f"{len(mapper_result.nodes)} nodes, {G.number_of_edges()} edges")
     return fig

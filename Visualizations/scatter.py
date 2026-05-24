@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+from zen_mapper.types import MapperResult
 
 from Helpers.param import SliderParam
-from Helpers.results import CovererResult, DatasetResult, FilterResult
+from Helpers.results import Context
 
 LABEL = "Scatter"
 PARAMS = [
@@ -25,14 +26,9 @@ PARAMS = [
 ]
 
 
-def render(
-    data_result: DatasetResult,
-    filtered: FilterResult,
-    cover: CovererResult,
-    nodes,
-    params,
-) -> Figure:
-    data = data_result.data
+def render(ctx: Context, mapper_result: MapperResult, params: dict) -> Figure:
+    assert ctx.dataset is not None
+    data = ctx.dataset.data
     fig, ax = plt.subplots()
     ax.scatter(data[:, 0], data[:, 1], s=params["point_size"], alpha=params["alpha"])
     ax.set_aspect("equal")

@@ -1,8 +1,15 @@
 import zen_mapper as zm
-from shiny import Inputs, Outputs, Session, reactive, render, ui
+from shiny import Inputs, Outputs, Session, reactive, render
 from zen_mapper.types import MapperResult
 
-from Helpers.results import ClustererResult, CovererResult, DatasetResult, FilterResult
+from Helpers.results import (
+    ClustererResult,
+    Context,
+    CovererResult,
+    DatasetResult,
+    FilterResult,
+)
+from Helpers.ui_controller import UIController
 
 
 def make_server(
@@ -50,22 +57,6 @@ def make_server(
                 module_id=module_id,
             )
 
-        @reactive.effect
-        def _update_selected_cover_element_sliders():
-            # if you need a slider that selects based on cover element
-            n_covers = len(current_mapper_result().cover)
-
-            for vid, vmod in visualization_modules.items():
-                if any(p.id == "selected_cover_element" for p in vmod.PARAMS):
-                    slider_id = f"{vid}__selected_cover_element"
-                    current_val = input[slider_id]()
-                    ui.update_slider(
-                        id=slider_id,
-                        max=n_covers,
-                        value=min(current_val, n_covers),
-                        session=session,
-                    )
-
         @reactive.calc
         def current_cluster() -> ClustererResult:
             module_id = input.cluster_select()
@@ -90,7 +81,32 @@ def make_server(
                 dim=1,  # TODO: Maybe don't hardcode 1D Mapper!
             )
 
-        def make_renderer(mod_id: str, mod):
+        @reactive.calc
+        def current_context() -> Context:
+            print(input["cover_element_view__selected_cover_element"]())
+
+            return Context(
+                dataset=current_dataset(),
+                filter=current_filtered_dataset(),
+                coverer=current_cover(),
+                clusterer=current_cluster(),
+                ui=UIController(
+                    session=session,
+                    input=input,
+                ),
+            )
+
+        @reactive.effect
+        def _auto_update_ui():
+            for mod_id, mod in visualization_modules.items():
+                if hasattr(mod, "update_ui"):
+                    mod.update_ui(
+                        ctx=current_context(),
+                        mapper_result=current_mapper_result(),
+                        mod_id=mod_id,
+                    )
+
+        def draw_plots(mod_id: str, mod):
             """
             Closes over mod_id and mod so each renderer is independent.
             Returns None (empty plot) when the module is not checked.
@@ -98,18 +114,22 @@ def make_server(
 
             @output(id=f"visualizations__{mod_id}")
             @render.plot
-            def _renderer():
+            def _plot_renderer():
                 if mod_id not in (input.visualization_select() or []):
                     return None
 
-                data = current_dataset()
-                filtered = current_filtered_dataset()
-                cover = current_cover()
-                result = current_mapper_result()
+                ctx = current_context()
+                mapper_result = current_mapper_result()
                 params = {p.id: input[f"{mod_id}__{p.id}"]() for p in mod.PARAMS}
-                return mod.render(data, filtered, cover, result, params)
+                if mod.render:
+                    return mod.render(
+                        ctx=ctx, mapper_result=mapper_result, params=params
+                    )
+                raise ValueError(f"{mod_id} does not have a render function.")
+                # TODO: if other draw functions are implemented this should
+                # fail gracefully
 
         for vid, vmod in visualization_modules.items():
-            make_renderer(vid, vmod)
+            draw_plots(vid, vmod)
 
     return server
