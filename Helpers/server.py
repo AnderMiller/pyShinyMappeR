@@ -19,6 +19,19 @@ def make_server(
     cluster_modules: dict,
     visualization_modules: dict,
 ):
+    def _merge_dict(*dict_args):
+        result = {}
+        for dictionary in dict_args:
+            result.update(dictionary)
+        return result
+
+    all_modules = _merge_dict(
+        dataset_modules,
+        filter_modules,
+        cover_modules,
+        cluster_modules,
+        visualization_modules,
+    )
 
     def server(input: Inputs, output: Outputs, session: Session):
 
@@ -96,7 +109,7 @@ def make_server(
 
         @reactive.effect
         def _auto_update_ui():
-            for mod_id, mod in visualization_modules.items():
+            for mod_id, mod in all_modules.items():
                 if hasattr(mod, "update_ui"):
                     mod.update_ui(
                         ctx=current_context(),
