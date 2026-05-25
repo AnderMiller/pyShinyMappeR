@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from matplotlib import markers
 from matplotlib.figure import Figure
 from zen_mapper.types import MapperResult
 
