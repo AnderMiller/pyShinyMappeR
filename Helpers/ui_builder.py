@@ -237,10 +237,13 @@ def visualization_panel(visualization_modules: dict) -> Any:
         accordion_panels.append(
             ui.accordion_panel(
                 mod.LABEL,
-                _description_accordion(module_id, description)
-                if description
-                else ui.tags.span(),
-                *[param_to_ui(module_id, p) for p in mod.PARAMS],
+                ui.panel_conditional(
+                    f"input.visualization_select.includes('{module_id}')",
+                    _description_accordion(module_id, description)
+                    if description
+                    else ui.tags.span(),
+                    *[param_to_ui(module_id, p) for p in mod.PARAMS],
+                ),
                 value=module_id,
             )
         )
@@ -256,6 +259,7 @@ def visualization_panel(visualization_modules: dict) -> Any:
             *accordion_panels,
             id="visualization_accordion",
             multiple=True,
+            open=False,
         ),
     )
 
