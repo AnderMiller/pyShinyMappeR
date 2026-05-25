@@ -14,6 +14,9 @@ from Helpers.param import (
 )
 
 
+# TODO:
+# add wrapper to give conditional functionality
+# need to update base param class
 def param_to_ui(module_id: str, param: Param) -> ui.Tag:
     control_id = f"{module_id}__{param.id}"
 
