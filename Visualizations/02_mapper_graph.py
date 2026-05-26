@@ -30,7 +30,9 @@ PARAMS = [
 ]
 
 
-def render(ctx: Context, mapper_result: MapperResult, params: dict) -> Figure:
+def render_matplotlib(
+    ctx: Context, mapper_result: MapperResult, params: dict
+) -> Figure:
     G = zm.to_networkx(mapper_result.nerve)
 
     fig, ax = plt.subplots()

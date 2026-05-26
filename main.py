@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from shiny import App, ui
+from shinywidgets import output_widget
 
 from Helpers.loader import load_modules
 from Helpers.server import make_server
@@ -38,7 +39,7 @@ CLUSTER_MODULES = load_modules(
 
 VISUALIZATION_MODULES = load_modules(
     directory=VISUALIZATION_DIR,
-    required_attrs=("LABEL", "PARAMS", "render"),
+    required_attrs=("LABEL", "PARAMS"),
     namespace_prefix="visualizations",
 )
 
@@ -76,15 +77,39 @@ app_ui = ui.page_fillable(
             CLUSTER_MODULES,
             VISUALIZATION_MODULES,
         ),
-        # ui.output_plot("main_plot"),
-        # reserve a spot for plots
         ui.div(
             *[
-                ui.panel_conditional(
-                    f"input.visualization_select.includes('{mod_id}')",
-                    ui.output_plot(f"visualizations__{mod_id}"),
+                panel
+                for mod_id, mod in VISUALIZATION_MODULES.items()
+                for panel in (
+                    ()
+                    if not hasattr(mod, "render_matplotlib")
+                    else ui.panel_conditional(
+                        f"input.visualization_select.includes('{mod_id}')",
+                        ui.card(
+                            ui.card_body(
+                                ui.output_plot(
+                                    f"matplotlib__{mod_id}",
+                                ),
+                                padding=0,
+                            ),
+                        ),
+                    ),
+                    ()
+                    if not hasattr(mod, "render_plotly")
+                    # Plotly card — only if module has render_plotly
+                    else ui.panel_conditional(
+                        f"input.visualization_select.includes('{mod_id}')",
+                        ui.card(
+                            ui.card_body(
+                                output_widget(
+                                    f"plotly__{mod_id}",
+                                ),
+                                padding=0,
+                            ),
+                        ),
+                    ),
                 )
-                for mod_id in VISUALIZATION_MODULES
             ],
             id="viz_container",
         ),

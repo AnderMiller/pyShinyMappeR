@@ -1,5 +1,6 @@
 import zen_mapper as zm
 from shiny import Inputs, Outputs, Session, reactive, render
+from shinywidgets import render_widget
 from zen_mapper.types import MapperResult
 
 from Helpers.results import (
@@ -25,6 +26,7 @@ def make_server(
             result.update(dictionary)
         return result
 
+    # for convenience
     all_modules = _merge_dict(
         dataset_modules,
         filter_modules,
@@ -117,30 +119,53 @@ def make_server(
                         mod_id=mod_id,
                     )
 
-        def draw_plots(mod_id: str, mod):
+        def draw(mod_id: str, mod):
             """
             Closes over mod_id and mod so each renderer is independent.
             Returns None (empty plot) when the module is not checked.
             """
 
-            @output(id=f"visualizations__{mod_id}")
+            @output(id=f"matplotlib__{mod_id}")
             @render.plot
-            def _plot_renderer():
+            def _matplotlib_renderer():
                 if mod_id not in (input.visualization_select() or []):
+                    return None
+
+                # if no render_matplotlib return None
+                if not hasattr(visualization_modules[mod_id], "render_matplotlib"):
                     return None
 
                 ctx = current_context()
                 mapper_result = current_mapper_result()
                 params = {p.id: input[f"{mod_id}__{p.id}"]() for p in mod.PARAMS}
-                if mod.render:
-                    return mod.render(
-                        ctx=ctx, mapper_result=mapper_result, params=params
+                if mod.render_matplotlib:
+                    return mod.render_matplotlib(
+                        ctx=ctx,
+                        mapper_result=mapper_result,
+                        params=params,
                     )
-                raise ValueError(f"{mod_id} does not have a render function.")
-                # TODO: if other draw functions are implemented this should
-                # fail gracefully
+
+            @output(id=f"plotly__{mod_id}")
+            @render_widget
+            def _plotly_renderer():
+                if mod_id not in (input.visualization_select() or []):
+                    return None
+                # if no render_plotly return None
+                if not hasattr(visualization_modules[mod_id], "render_plotly"):
+                    return None
+
+                ctx = current_context()
+                mapper_result = current_mapper_result()
+                params = {p.id: input[f"{mod_id}__{p.id}"]() for p in mod.PARAMS}
+
+                if mod.render_plotly:
+                    return mod.render_plotly(
+                        ctx=ctx,
+                        mapper_result=mapper_result,
+                        params=params,
+                    )
 
         for vid, vmod in visualization_modules.items():
-            draw_plots(vid, vmod)
+            draw(vid, vmod)
 
     return server

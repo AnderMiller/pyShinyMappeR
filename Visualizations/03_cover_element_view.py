@@ -61,7 +61,9 @@ PARAMS = [
 ]
 
 
-def render(ctx: Context, mapper_result: MapperResult, params: dict) -> Figure:
+def render_matplotlib(
+    ctx: Context, mapper_result: MapperResult, params: dict
+) -> Figure:
     num_nodes = len(mapper_result.nodes)
 
     cover_idx = int(params["selected_cover_element"]) - 1

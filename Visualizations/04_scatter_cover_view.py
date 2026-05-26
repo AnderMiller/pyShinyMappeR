@@ -39,7 +39,9 @@ PARAMS = [
 SUPPORTED_FILTER_MOD_IDS = ["theta_projection", "pca_projection"]
 
 
-def render(ctx: Context, mapper_result: MapperResult, params: dict) -> Figure:
+def render_matplotlib(
+    ctx: Context, mapper_result: MapperResult, params: dict
+) -> Figure:
     assert ctx.dataset is not None
     assert ctx.filter is not None
 

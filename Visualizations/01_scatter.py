@@ -26,7 +26,9 @@ PARAMS = [
 ]
 
 
-def render(ctx: Context, mapper_result: MapperResult, params: dict) -> Figure:
+def render_matplotlib(
+    ctx: Context, mapper_result: MapperResult, params: dict
+) -> Figure:
     assert ctx.dataset is not None
     data = ctx.dataset.data
     fig, ax = plt.subplots()
