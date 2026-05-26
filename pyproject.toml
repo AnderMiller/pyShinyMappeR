@@ -16,6 +16,7 @@ dependencies = [
     "umap-learn",
     "matplotlib>=3.10.8",
     "kaiju-mapper>=0.1.1",
+    "shinywidgets>=0.8.1",
 ]
 
 [dependency-groups]
