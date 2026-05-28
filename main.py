@@ -7,36 +7,48 @@ from Helpers.loader import load_modules
 from Helpers.server import make_server
 from Helpers.ui_builder import build_sidebar
 
+import logging 
+logger = logging.getLogger(__name__)
+
+logging.basicConfig(filename='pyShinyMapper.log', level=logging.INFO)
+
+
+logger.info("Module directory paths:")
 DATASETS_DIR = Path(__file__).parent / "Datasets"
 FILTERS_DIR = Path(__file__).parent / "Lenses"
 COVER_DIR = Path(__file__).parent / "Coverers"
 CLUSTER_DIR = Path(__file__).parent / "Clusterers"
 VISUALIZATION_DIR = Path(__file__).parent / "Visualizations"
 
+logger.info(f"  Dataset Modules: {DATASETS_DIR}")
 DATASET_MODULES = load_modules(
     directory=DATASETS_DIR,
     required_attrs=("LABEL", "PARAMS", "generate"),
     namespace_prefix="datasets",
 )
 
+logger.info(f"  Filter Modules: {FILTERS_DIR}")
 FILTER_MODULES = load_modules(
     directory=FILTERS_DIR,
     required_attrs=("LABEL", "PARAMS", "OUTPUT_DIM", "filter"),
     namespace_prefix="lenses",
 )
 
+logger.info(f"  Cover Modules: {COVER_DIR}")
 COVER_MODULES = load_modules(
     directory=COVER_DIR,
     required_attrs=("LABEL", "PARAMS", "cover"),
     namespace_prefix="coverers",
 )
 
+logger.info(f"  Cluster Modules: {CLUSTER_DIR}")
 CLUSTER_MODULES = load_modules(
     directory=CLUSTER_DIR,
     required_attrs=("LABEL", "PARAMS", "cluster"),
     namespace_prefix="clusterers",
 )
 
+logger.info(f"  Visualization Modules: {VISUALIZATION_DIR}")
 VISUALIZATION_MODULES = load_modules(
     directory=VISUALIZATION_DIR,
     required_attrs=("LABEL", "PARAMS"),
