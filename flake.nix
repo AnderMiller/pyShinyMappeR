@@ -25,22 +25,6 @@
           rEnv = pkgs.rWrapper.override {
             packages = with pkgs.rPackages; [
               mappeR
-              ggplot2
-              patchwork
-              shiny
-              dplyr
-              tidyr
-              devtools
-              remotes
-              RColorBrewer
-              mclust
-              nortest
-              dendextend
-              igraph
-              httpuv
-              styler
-              lintr
-              jsonlite
             ];
           };
         in
