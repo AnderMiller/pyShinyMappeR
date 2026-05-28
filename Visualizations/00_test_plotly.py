@@ -1,4 +1,3 @@
-import pandas as pd
 import plotly.express as pe
 from zen_mapper.types import MapperResult
 
