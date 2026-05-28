@@ -15,6 +15,9 @@ Easiest way is having Nix installed:
 
 ```bash
 nix develop
+uv venv .venv
+source .venv/bin/activate
+uv sync
 just app
 ```
 
