@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from typing import Any
 from logging import getLogger
-logger=getLogger(__name__)
+from typing import Any
 
 from shiny import ui
 
@@ -13,6 +12,8 @@ from Helpers.param import (
     SliderParam,
     SwitchParam,
 )
+
+logger = getLogger(__name__)
 
 
 @dataclass

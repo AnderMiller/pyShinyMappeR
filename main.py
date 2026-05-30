@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from shiny import App, ui
@@ -7,10 +8,9 @@ from Helpers.loader import load_modules
 from Helpers.server import make_server
 from Helpers.ui_builder import build_sidebar
 
-import logging 
 logger = logging.getLogger(__name__)
 
-logging.basicConfig(filename='pyShinyMapper.log', level=logging.INFO)
+logging.basicConfig(filename="pyShinyMapper.log", level=logging.INFO)
 
 
 logger.info("Module directory paths:")

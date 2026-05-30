@@ -1,11 +1,8 @@
+import logging
 from pathlib import Path
 from typing import Any
 
 from shiny import ui
-
-import logging
-logger = logging.getLogger(__name__)
-
 
 from Helpers.param import (
     CheckboxParam,
@@ -17,6 +14,8 @@ from Helpers.param import (
     SwitchParam,
 )
 
+logger = logging.getLogger(__name__)
+
 
 # TODO:
 # add wrapper to give conditional functionality
@@ -24,7 +23,7 @@ from Helpers.param import (
 def param_to_ui(module_id: str, param: Param) -> ui.Tag:
 
     control_id = f"{module_id}__{param.id}"
-    logger.info(f"Building UI for {control_id}...") 
+    logger.info(f"Building UI for {control_id}...")
 
     match param:
         case SliderParam():
@@ -162,7 +161,6 @@ def filter_panel(filter_modules: dict) -> Any:
 
     logger.info(f"Filter Panel: {choices}")
 
-
     filter_param_panels = []
     for module_id, mod in filter_modules.items():
         description = getattr(mod, "DESCRIPTION", None)
@@ -290,7 +288,7 @@ def _help_panel() -> Any:
         readme_content = readme_path.read_text(encoding="utf-8")
     except FileNotFoundError:
         readme_content = "_README.md not found._"
-        logger.warning(f"README.md was not found.")
+        logger.warning("README.md was not found.")
     except Exception as e:
         readme_content = f"_Error loading README.md: {e}_"
         logger.warning(f"Error loading README.md: {e}")
@@ -313,7 +311,7 @@ def build_sidebar(
     cluster_modules: dict,
     visualization_modules: dict,
 ) -> ui.Sidebar:
-    logger.info(f"Building Sidebar...")
+    logger.info("Building Sidebar...")
     return ui.sidebar(
         ui.markdown("# pyShinyMapper"),
         ui.navset_underline(
@@ -331,5 +329,5 @@ def build_sidebar(
         border_color="#000000",
         padding=15,
         bg="#eeeeee",
-        position='left'
+        position="left",
     )

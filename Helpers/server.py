@@ -1,9 +1,9 @@
+from logging import getLogger
+
 import zen_mapper as zm
 from shiny import Inputs, Outputs, Session, reactive, render
 from shinywidgets import render_plotly
 from zen_mapper.types import MapperResult
-from logging import getLogger
-logger = getLogger(__name__)
 
 from Helpers.results import (
     ClustererResult,
@@ -13,6 +13,8 @@ from Helpers.results import (
     FilterResult,
 )
 from Helpers.ui_controller import UIController
+
+logger = getLogger(__name__)
 
 
 def make_server(
@@ -145,18 +147,16 @@ def make_server(
                 # if no render_matplotlib return None
                 if not hasattr(visualization_modules[mod_id], "render_matplotlib"):
                     logger.info(
-                            f"{mod_id}: render_matplotlib function does \
+                        f"{mod_id}: render_matplotlib function does \
                                     not exist, returning None"
-                            )
+                    )
                     return None
 
                 ctx = current_context()
                 mapper_result = current_mapper_result()
                 params = {p.id: input[f"{mod_id}__{p.id}"]() for p in mod.PARAMS}
                 if mod.render_matplotlib:
-                    logger.info(
-                            f"{mod_id}: RENDERING matplotlib plot."
-                            )
+                    logger.info(f"{mod_id}: RENDERING matplotlib plot.")
                     return mod.render_matplotlib(
                         ctx=ctx,
                         mapper_result=mapper_result,
@@ -172,9 +172,9 @@ def make_server(
                 # if no render_plotly return None
                 if not hasattr(visualization_modules[mod_id], "render_plotly"):
                     logger.info(
-                            f"{mod_id}: render_plotly function does \
+                        f"{mod_id}: render_plotly function does \
                                     not exist, returning None"
-                            )
+                    )
                     return None
 
                 ctx = current_context()
@@ -182,9 +182,7 @@ def make_server(
                 params = {p.id: input[f"{mod_id}__{p.id}"]() for p in mod.PARAMS}
 
                 if mod.render_plotly:
-                    logger.info(
-                            f"{mod_id}: RENDERING plotly."
-                            )
+                    logger.info(f"{mod_id}: RENDERING plotly.")
                     return mod.render_plotly(
                         ctx=ctx,
                         mapper_result=mapper_result,

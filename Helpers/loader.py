@@ -1,8 +1,9 @@
 import importlib.util
+import logging
 from importlib.machinery import ModuleSpec
 from pathlib import Path
 from types import ModuleType
-import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -30,7 +31,9 @@ def load_modules(
 
                 missing = [a for a in required_attrs if not hasattr(mod, a)]
                 if missing:
-                    logger.warning(f"The file {path.name} is missing: {missing}    skipping...")
+                    logger.warning(
+                        f"The file {path.name} is missing: {missing}    skipping..."
+                    )
                     continue
 
                 modules[module_id] = mod
