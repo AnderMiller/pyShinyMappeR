@@ -3,6 +3,10 @@ from typing import Any
 
 from shiny import ui
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 from Helpers.param import (
     CheckboxParam,
     InputTextParam,
@@ -18,7 +22,9 @@ from Helpers.param import (
 # add wrapper to give conditional functionality
 # need to update base param class
 def param_to_ui(module_id: str, param: Param) -> ui.Tag:
+
     control_id = f"{module_id}__{param.id}"
+    logger.info(f"Building UI for {control_id}...") 
 
     match param:
         case SliderParam():
@@ -126,6 +132,8 @@ def dataset_panel(dataset_modules: dict) -> Any:
 
     choices = {mid: mod.LABEL for mid, mod in dataset_modules.items()}
 
+    logger.info(f"Dataset Panel: {choices}")
+
     param_panels = []
     for module_id, mod in dataset_modules.items():
         description = getattr(mod, "DESCRIPTION", None)
@@ -151,6 +159,9 @@ def filter_panel(filter_modules: dict) -> Any:
         return ui.nav_panel("Filter", ui.markdown("_No filter modules found._"))
 
     choices = {mid: mod.LABEL for mid, mod in filter_modules.items()}
+
+    logger.info(f"Filter Panel: {choices}")
+
 
     filter_param_panels = []
     for module_id, mod in filter_modules.items():
@@ -178,6 +189,8 @@ def cover_panel(cover_modules: dict) -> Any:
 
     choices = {mid: mod.LABEL for mid, mod in cover_modules.items()}
 
+    logger.info(f"Cover Panel: {choices}")
+
     cover_param_panels = []
     for module_id, mod in cover_modules.items():
         description = getattr(mod, "DESCRIPTION", None)
@@ -203,6 +216,8 @@ def cluster_panel(cluster_modules: dict) -> Any:
         return ui.nav_panel("Cluster", ui.markdown("_No cluster modules found._"))
 
     choices = {mid: mod.LABEL for mid, mod in cluster_modules.items()}
+
+    logger.info(f"Cluster Panel: {choices}")
 
     cluster_param_panels = []
     for module_id, mod in cluster_modules.items():
@@ -233,6 +248,8 @@ def visualization_panel(visualization_modules: dict) -> Any:
         )
 
     choices = {mid: mod.LABEL for mid, mod in visualization_modules.items()}
+
+    print(f"Visualization Panel: {choices}")
 
     accordion_panels = []
     for module_id, mod in visualization_modules.items():
@@ -273,8 +290,10 @@ def _help_panel() -> Any:
         readme_content = readme_path.read_text(encoding="utf-8")
     except FileNotFoundError:
         readme_content = "_README.md not found._"
+        logger.warning(f"README.md was not found.")
     except Exception as e:
         readme_content = f"_Error loading README.md: {e}_"
+        logger.warning(f"Error loading README.md: {e}")
 
     return ui.nav_panel(
         "❓",
@@ -294,6 +313,7 @@ def build_sidebar(
     cluster_modules: dict,
     visualization_modules: dict,
 ) -> ui.Sidebar:
+    logger.info(f"Building Sidebar...")
     return ui.sidebar(
         ui.markdown("# pyShinyMapper"),
         ui.navset_underline(
@@ -304,11 +324,12 @@ def build_sidebar(
             visualization_panel(visualization_modules),
             _help_panel(),
         ),
-        open="always",
+        open="open",
         fillable=True,
         border=True,
         border_radius=True,
         border_color="#000000",
         padding=15,
         bg="#eeeeee",
+        position='left'
     )

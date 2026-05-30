@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
+from logging import getLogger
+logger=getLogger(__name__)
 
 from shiny import ui
 
@@ -19,6 +21,7 @@ class UIController:
     input: Any
 
     def update_slider(self, slider_id: str, param: SliderParam):
+        logger.info(f"updating {slider_id}")
         ui.update_slider(
             id=slider_id,
             value=param.value,
@@ -31,6 +34,7 @@ class UIController:
         )
 
     def update_numeric(self, numeric_id: str, param: NumericParam):
+        logger.info(f"updating {numeric_id}")
         ui.update_numeric(
             id=numeric_id,
             value=param.value,
@@ -43,6 +47,7 @@ class UIController:
     def update_select(self, select_id: str, param: SelectParam):
         # typechecker is mad because shiny uses a type that doesnt exist
         # :/
+        logger.info(f"updating {select_id}")
         ui.update_select(
             id=select_id,
             choices=param.choices,
@@ -51,16 +56,19 @@ class UIController:
         )
 
     def update_checkbox(self, checkbox_id: str, param: CheckboxParam):
+        logger.info(f"updating {checkbox_id}")
         ui.update_checkbox(
             id=checkbox_id, label=param.label, value=param.value, session=self.session
         )
 
     def update_switch(self, switch_id: str, param: SwitchParam):
+        logger.info(f"updating {switch_id}")
         ui.update_switch(
             id=switch_id, label=param.label, value=param.value, session=self.session
         )
 
     def update_input_text(self, input_text_id: str, param: InputTextParam):
+        logger.info(f"updating {input_text_id}")
         ui.update_text(
             id=input_text_id,
             label=param.label,
