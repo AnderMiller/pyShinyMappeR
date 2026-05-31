@@ -88,6 +88,22 @@ PARAMS = [
         value=0.05,
         step=0.01,
     ),
+    SliderParam(
+        id="center_x",
+        label="Center X-coordinate",
+        min=-1.0,
+        max=1.0,
+        value=0,
+        step=0.01,
+    ),
+    SliderParam(
+        id="center_y",
+        label="Center Y-coordinate",
+        min=-1.0,
+        max=1.0,
+        value=0,
+        step=0.01,
+    ),
     NumericParam(
         id="seed",
         label="Random Seed",
@@ -154,7 +170,10 @@ def generate(params: dict) -> np.ndarray:
     noise = _sample_noise(rng, n, params["noise_scale"], theta, params["noise_type"])
 
     return (
-        np.column_stack([np.cos(theta), np.sin(theta)]) + params["noise_weight"] * noise
+        np.column_stack(
+            [np.cos(theta) + params["center_x"], np.sin(theta) + params["center_y"]]
+        )
+        + params["noise_weight"] * noise
     )
 
 
