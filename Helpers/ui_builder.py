@@ -247,7 +247,7 @@ def visualization_panel(visualization_modules: dict) -> Any:
 
     choices = {mid: mod.LABEL for mid, mod in visualization_modules.items()}
 
-    print(f"Visualization Panel: {choices}")
+    logger.info(f"Visualization Panel: {choices}")
 
     accordion_panels = []
     for module_id, mod in visualization_modules.items():
