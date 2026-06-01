@@ -11,29 +11,34 @@ from Helpers.results import (
 
 logger = getLogger(__name__)
 
-"""
+DESCRIPTION = """
 This module requires that the lens function be able to return
 the equation of a line on which the original dataset is projected to.
 This is straight forward for a theta projection but is more complicated for
 something like PCA which auto-centers the dataset.
-
-TODO: Add a supported cover, supported clusterers, etc tags
-to the visualization result class.
 """
 
-LABEL = "Scatter With Cover"
+LABEL = "Scatter with Cover/Mapper"
 PARAMS = [
     SliderParam(
-        id="point_size",
-        label="Point Size",
+        id="node_size",
+        label="Node Size",
         min=1,
         max=50,
         value=10,
         step=1,
     ),
     SliderParam(
+        id="point_size",
+        label="Point Size",
+        min=1,
+        max=25,
+        value=5,
+        step=1,
+    ),
+    SliderParam(
         id="alpha",
-        label="Opacity",
+        label="Cover Opacity",
         min=0,
         max=1.0,
         value=0.90,
@@ -41,7 +46,7 @@ PARAMS = [
     ),
     SliderParam(
         id="buffer",
-        label="Buffer Ratio",
+        label="Cover Buffer",
         min=0.05,
         max=1.0,
         value=0.1,
@@ -61,7 +66,14 @@ def render_plotly(ctx: Context, mapper_result: MapperResult, params: dict):
     data = ctx.dataset.data
     fig = go.Figure()
     fig.add_trace(
-        go.Scatter(x=data[:, 0], y=data[:, 1], mode="markers"),
+        go.Scatter(
+            x=data[:, 0],
+            y=data[:, 1],
+            mode="markers",
+            zorder=-1,
+            marker=dict(size=params["point_size"]),
+            name=f"{ctx.dataset.label} Data",
+        ),
     )
     fig.update_layout(
         title_text=f"{LABEL}",
@@ -94,16 +106,21 @@ def render_plotly(ctx: Context, mapper_result: MapperResult, params: dict):
     left_line_pt = point - buffer * slope_vec
     right_line_pt = point + buffer * slope_vec
 
-    # draw the line
-    fig.add_shape(
-        type="line",
-        x0=left_line_pt[0],
-        y0=left_line_pt[1],
-        x1=right_line_pt[0],
-        y1=right_line_pt[1],
+    # draw projection line
+    fig.add_trace(
+        go.Scatter(
+            x=[left_line_pt[0], right_line_pt[0]],
+            y=[left_line_pt[1], right_line_pt[1]],
+            mode="lines",
+            line=dict(width=2, color="black", dash="dash"),
+            hoverinfo="skip",
+            showlegend=True,
+            name="Projection Line",
+            visible=True,
+        )
     )
 
-    # now we can draw the rectangles
+    # draw cover element rectangles
     for i, erval in enumerate(intervals):
         left_pt = point + erval.left * slope_vec
         right_pt = point + erval.right * slope_vec
@@ -132,7 +149,51 @@ def render_plotly(ctx: Context, mapper_result: MapperResult, params: dict):
                 hoverinfo="skip",
                 showlegend=True,
                 legendgroup=f"Cover Element {i}",
+                name=f"Element {i + 1}",
             )
         )
+
+    # draw embedded mapper graph
+    nodes = mapper_result.nodes
+    nerve = mapper_result.nerve
+    if len(nodes) == 0:
+        raise ValueError("Mapper graph has no nodes")
+
+    node_positions = [np.mean(data[node_indices], axis=0) for node_indices in nodes]
+    node_positions = np.array(node_positions)
+
+    # draw edges from nerve[1]
+    for node1_id, node2_id in nerve[1]:
+        fig.add_trace(
+            go.Scatter(
+                x=[node_positions[node1_id, 0], node_positions[node2_id, 0]],
+                y=[node_positions[node1_id, 1], node_positions[node2_id, 1]],
+                mode="lines",
+                line=dict(width=2, color="black"),
+                hoverinfo="skip",
+                showlegend=False,
+                legendgroup="Mapper Graph",
+            )
+        )
+
+    # draw nodes
+    fig.add_trace(
+        go.Scatter(
+            x=node_positions[:, 0],
+            y=node_positions[:, 1],
+            mode="markers",
+            marker=dict(
+                size=params["node_size"] + 4,
+                color="red",
+                line=dict(width=2, color="darkred"),
+                symbol="circle",
+            ),
+            hoverinfo="text",
+            text=[f"Node {i}: {len(n)} pts" for i, n in enumerate(nodes)],
+            showlegend=True,
+            legendgroup="Mapper Graph",
+            name="Mapper",
+        )
+    )
 
     return fig
