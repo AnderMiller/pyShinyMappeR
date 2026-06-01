@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from logging import getLogger
-from typing import Optional
+from typing import Any, List, Optional
 
 import numpy as np
 from pandas import Interval
-from zen_mapper.types import Clusterer, Cover
+from zen_mapper.types import Clusterer
 
 from Helpers.ui_controller import UIController
 
@@ -60,7 +60,9 @@ class FilterResult(BasicResult):
 
 @dataclass
 class CovererResult(BasicResult):
-    cover: Cover
+    cover: List[Any]
+    """Cover is a list[list[int,...]] of filter-data index values.
+    Each inner list is a cover element."""
     intervals: Optional[list[Interval]] = None
 
 

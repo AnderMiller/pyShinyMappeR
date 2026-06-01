@@ -43,7 +43,7 @@ def cover(filtered_data, params: dict) -> Tuple[Any, list[Interval]]:
         n_elements=params["n_intervals"],
         percent_overlap=params["overlap"] / 100,
     )
-    cover_elements = map(np.asarray, cover_scheme(filtered_data))
+    cover_elements = list(map(np.asarray, cover_scheme(filtered_data)))
     # need to call cover_scheme to create widths
     width = cover_scheme.width
     centers = cover_scheme.centers
