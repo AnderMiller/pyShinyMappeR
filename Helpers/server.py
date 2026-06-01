@@ -92,7 +92,7 @@ def make_server(
                 filtered=current_filtered_dataset(),
                 cover=current_cover(),
                 params=params,
-                modules=cover_modules,
+                modules=cluster_modules,
                 module_id=module_id,
             )
 
