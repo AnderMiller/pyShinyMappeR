@@ -1,11 +1,10 @@
-# Visualizations/mapper_graph.py
 import matplotlib.pyplot as plt
 import networkx as nx
 import zen_mapper as zm
 from matplotlib.figure import Figure
 from zen_mapper.types import MapperResult
 
-from Helpers.param import CheckboxParam, SliderParam
+from Helpers.param import CheckboxParam, SelectParam, SliderParam
 from Helpers.results import Context
 
 LABEL = "Mapper Graph"
@@ -18,7 +17,11 @@ PARAMS = [
         value=500,
         step=10,
     ),
-    CheckboxParam(id="show_labels", label="Show Labels", value=False),
+    CheckboxParam(
+        id="show_labels",
+        label="Show Labels",
+        value=False,
+    ),
     SliderParam(
         id="alpha",
         label="Opacity",
@@ -26,6 +29,23 @@ PARAMS = [
         max=1.0,
         value=1.0,
         step=0.05,
+    ),
+    SelectParam(
+        id="layout",
+        label="Layout",
+        choices=(
+            "Kamada-Kawai",
+            "Spring",
+            "Fruchterman-Reingold",
+            "Circular",
+            "Random",
+            "Shell",
+            "Spectral",
+            "Planar",
+            "Bipartite",
+            "Spiral",
+        ),
+        selected="Kamada-Kawai",
     ),
 ]
 
@@ -36,7 +56,30 @@ def render_matplotlib(
     G = zm.to_networkx(mapper_result.nerve)
 
     fig, ax = plt.subplots()
-    pos = nx.spring_layout(G, seed=42)
+
+    match params["layout"]:
+        case "Kamada-Kawai":
+            pos = nx.kamada_kawai_layout(G)
+        case "Spring":
+            pos = nx.spring_layout(G, seed=42)
+        case "Fruchterman-Reingold":
+            pos = nx.arf_layout(G, pos=nx.spring_layout(G, seed=42), seed=42)
+        case "Circular":
+            pos = nx.circular_layout(G)
+        case "Random":
+            pos = nx.random_layout(G, seed=42)
+        case "Shell":
+            pos = nx.shell_layout(G)
+        case "Spectral":
+            pos = nx.spectral_layout(G)
+        case "Planar":
+            pos = nx.planar_layout(G)
+        case "Bipartite":
+            pos = nx.bipartite_layout(G, nodes=nx.bipartite.sets(G)[0])
+        case "Spiral":
+            pos = nx.spiral_layout(G)
+
+    nx.layout
     nx.draw(
         G,
         pos,
