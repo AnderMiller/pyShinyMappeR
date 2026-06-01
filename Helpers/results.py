@@ -3,7 +3,8 @@ from logging import getLogger
 from typing import Optional
 
 import numpy as np
-from zen_mapper.types import Clusterer, CoverScheme
+from pandas import Interval
+from zen_mapper.types import Clusterer, Cover
 
 from Helpers.ui_controller import UIController
 
@@ -18,16 +19,22 @@ future visualization and other utilities.
 @dataclass
 class ProjectionLine:
     point: np.ndarray
-    slope_vec: np.ndarray
+    """The point is considered the origin in the filtered space."""
+    slope_vec: Optional[np.ndarray]
+    """The slope vector is the positive direction in the filter space (1D)."""
 
     def slope(self):
-        if self.slope_vec[0] == 0:
-            logger.error("slope vector has dx==0...")
+        if not self.slope_vec:
+            logger.error("Projection line has no slope vector provided.")
             return np.inf
-        return self.slope_vec[-1] / self.slope_vec[0]
+        if self.slope_vec is not None:
+            if self.slope_vec[0] == 0:
+                logger.error("DIVIDEBYZERO: slope vector has dx==0...")
+
+                return np.inf
+            return self.slope_vec[-1] / self.slope_vec[0]
 
 
-# TODO: Update Filter REsults
 @dataclass
 class BasicResult:
     params: dict
@@ -47,14 +54,14 @@ class DatasetResult(BasicResult):
 @dataclass
 class FilterResult(BasicResult):
     filtered_data: np.ndarray
-    line: Optional["tuple[str, ...]"] = None
+    line: Optional[ProjectionLine]
     output_dim: Optional["int"] = None
 
 
 @dataclass
 class CovererResult(BasicResult):
-    cover: CoverScheme
-    bounds: Optional["tuple"] = None
+    cover: Cover
+    intervals: Optional[list[Interval]] = None
 
 
 @dataclass
