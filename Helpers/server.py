@@ -3,6 +3,7 @@ from logging import getLogger
 import zen_mapper as zm
 from shiny import Inputs, Outputs, Session, reactive, render
 from shinywidgets import render_plotly
+from zen_mapper.cover import precomputed_cover
 from zen_mapper.types import MapperResult
 
 from Helpers.results import (
@@ -101,7 +102,7 @@ def make_server(
             return zm.mapper(
                 data=current_dataset().data,
                 projection=current_filtered_dataset().filtered_data,
-                cover_scheme=current_cover().cover,
+                cover_scheme=precomputed_cover(current_cover().cover),
                 clusterer=current_cluster().clusterer,
                 dim=1,  # TODO: Maybe don't hardcode 1D Mapper!
             )
