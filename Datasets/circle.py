@@ -49,7 +49,7 @@ PARAMS = [
         label="Number of Points $ ( N ) $ ",
         min=10,
         max=1000,
-        value=200,
+        value=500,
         step=10,
     ),
     SliderParam(
@@ -71,7 +71,7 @@ PARAMS = [
         label="Noise Weight $ ( \\lambda ) $ ",
         min=0.0,
         max=1.0,
-        value=0.05,
+        value=0.1,
         step=0.01,
     ),
     SelectParam(
@@ -85,7 +85,7 @@ PARAMS = [
         label=" $ \\text{Noise Scale }( \\sigma ) $ ",
         min=0.0,
         max=1.0,
-        value=0.05,
+        value=1,
         step=0.01,
     ),
     SliderParam(
@@ -103,6 +103,14 @@ PARAMS = [
         max=1.0,
         value=0,
         step=0.01,
+    ),
+    SliderParam(
+        id="radius",
+        label="Radius",
+        min=0.5,
+        max=5.0,
+        value=1.0,
+        step=0.1,
     ),
     NumericParam(
         id="seed",
@@ -171,7 +179,10 @@ def generate(params: dict) -> np.ndarray:
 
     return (
         np.column_stack(
-            [np.cos(theta) + params["center_x"], np.sin(theta) + params["center_y"]]
+            [
+                params["radius"] * np.cos(theta) + params["center_x"],
+                params["radius"] * np.sin(theta) + params["center_y"],
+            ]
         )
         + params["noise_weight"] * noise
     )
