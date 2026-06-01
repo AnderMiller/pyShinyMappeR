@@ -5,13 +5,14 @@ from sklearn.decomposition import PCA
 
 # Note that PCA centers but does not rescale the data
 from Helpers.param import SliderParam
-from Helpers.results import DatasetResult, FilterResult
+from Helpers.results import DatasetResult, FilterResult, ProjectionLine
 
 LABEL = "PCA"
+OUTPUT_DIM = 1
+# this is required but is not really used
+
 
 # TODO: update depending on the selected output dimension
-OUTPUT_DIM = 1
-
 DESCRIPTION = """
 ### Principle Component Analysis
 
@@ -30,29 +31,25 @@ PARAMS = [
 ]
 
 
-def filter(data: np.ndarray, params: dict) -> np.ndarray:
-    filtered_data = PCA(n_components=OUTPUT_DIM).fit_transform(data)
-    return filtered_data
+def filter(data: np.ndarray, params: dict) -> tuple[Any, ProjectionLine]:
+    pca = PCA(n_components=int(params["output_dimension"]))
+    filtered_data = pca.fit_transform(data)
+    assert pca.components_ is not None
+
+    # tuple of (point, slope-vector)
+    projection_line = ProjectionLine(point=pca.mean_, slope_vec=pca.components_[0])
+
+    return filtered_data, projection_line
 
 
-def projection_line():
-    """
-    This should return something that specifies a line
-    """
-    return None
-
-
-def result(
-    dataset: DatasetResult,
-    params: dict,
-    modules: Any,
-    module_id: Any,
-):
+def result(dataset: DatasetResult, params: dict, modules: Any, module_id: Any):
+    filtered_data, projection_line = filter(data=dataset.data, params=params)
     return FilterResult(
         params=params,
         module_id=module_id,
         modules=modules,
         label=LABEL,
-        filtered_data=filter(data=dataset.data, params=params),
-        line=projection_line(),
+        filtered_data=filtered_data,
+        line=projection_line,
+        output_dim=int(params["output_dimension"]),
     )
