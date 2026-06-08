@@ -139,8 +139,8 @@ contains the server information which could be used inside of any `update_ui()` 
 
 ## Writing descriptions
 
-The optional `DESCRIPTION` and `LABEL` strings each support Markdown and LaTeX (rendered via MathJax 3). Use `\$...\$` for inline math and `\$\$...\$\$` for 
-display math. Use `\\\\` for LaTeX backslashes inside Python strings.
+The optional `DESCRIPTION` and `LABEL` strings each support Markdown and LaTeX (rendered via MathJax 3). Use `$...$` for inline math and `$$...$$` for 
+display math. Use `\\` for LaTeX backslashes inside Python strings.
 
 #### Example:
 
